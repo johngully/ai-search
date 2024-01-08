@@ -1,10 +1,7 @@
 "use client"
-import Image from 'next/image'
-import { ChangeEvent, ReactNode, useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
+import { productSearchTextToCriteria } from './ai';
 import { products as data } from './data';
-
-
-const apikey = process.env.OPENAI_API_KEY;
 
 type dimensionConfiguration = {
   dimensionA: string,
@@ -80,7 +77,6 @@ function ProductsList({products}: ProductsListProps) {
   return results;
 };
 
-
 function parseResults(value: string) {
   const result = {
     name: value,
@@ -92,15 +88,58 @@ function parseResults(value: string) {
   return result;
 }
 
+async function parseResultsByAi(value: string) {
+  let result = {};
+  try {
+    const suggestion = await productSearchTextToCriteria(value);
+    result = suggestion as Criteria;
+  } finally {
+    return result;
+  }
+}
+
 function search(criteria: Criteria): Products {
   const data = loadProducts();
   const results = data.filter((product: Product) => {
-    return product.name.toLowerCase().includes(criteria.name) || 
-           product.dimensionA.toLowerCase().includes(criteria.dimensionA) || 
-           product.dimensionB.toLowerCase().includes(criteria.dimensionB) || 
-           product.dimensionC.toLowerCase().includes(criteria.dimensionC);
+    const filters: Array<boolean> = [];
+    addCriteriaToFilter(filters, filterProperty(product, criteria, "name"));
+    addCriteriaToFilter(filters, filterProperty(product, criteria, "dimensionA"));
+    addCriteriaToFilter(filters, filterProperty(product, criteria, "dimensionB", "exact"));
+    addCriteriaToFilter(filters, filterProperty(product, criteria, "dimensionC", "exact"));
+    console.log(product.name, product.dimensionB, filters);
+    return filters.every(f => f === true)
   });
   return results;
+}
+
+function addCriteriaToFilter(filters: Array<boolean>, filterResult) {
+  if (filterResult.hasCriteria) {
+    filters.push(filterResult.isMatch);
+    console.log(filterResult);
+  }
+}
+
+function filterProperty(product:any, criteria:any, property:string, matchType:string="includes") {
+  
+  let isMatch = false;
+  const pValue = product[property].trim().toLowerCase();
+  const cValue = criteria[property]?.trim()?.toLowerCase();
+
+  let hasCriteria = cValue !== undefined && cValue !== null && cValue !== "";
+  if (!hasCriteria) {
+    return { name: property, criteriaExists: false, isMatch: false };
+  }
+
+  switch (matchType) {
+    case "exact":
+      isMatch = pValue===cValue
+      break;
+    case "includes":
+    default:
+      isMatch = pValue.includes(cValue)
+  }
+
+  return { name: property, hasCriteria, isMatch };
 }
 
 function loadProducts(): Products {
@@ -113,18 +152,20 @@ export default function Home() {;
   const defaultProducts: Products = [];
   const [products, setProducts] = useState(defaultProducts);
   const [searchText, setSearchText] = useState("");
+  const [filterCriteria, setFilterCriteria] = useState({});
 
   useEffect(() => {
     const foo = loadProducts();
     setProducts(foo);
   }, [])
 
-  function onSubmit(e: FormDataEvent) {
+  async function onSubmit(e: FormDataEvent) {
     e.preventDefault();
-    const criteria: Criteria = parseResults(searchText);
-    const filteredProducts = search(criteria);
+    // const criteria: Criteria = parseResults(searchText);
+    const aiCriteria = await parseResultsByAi(searchText);
+    setFilterCriteria(aiCriteria);
+    const filteredProducts = search(aiCriteria);
     setProducts(filteredProducts);
-
   }
 
   function onSearchTextChange(e) {
@@ -139,6 +180,13 @@ export default function Home() {;
         <input type="text" placeholder="search for anything ..." onChange={onSearchTextChange} className="rounded p-2" />
         <input type="submit" value="Search" className="rounded ml-2 p-2 px-4 bg-blue-300"></input>
       </form>
+      <div>
+        <div>Criteria</div>
+        <div><span>Name: </span>{filterCriteria.name}</div>
+        <div><span>DimensionA: </span>{filterCriteria.dimensionA}</div>
+        <div><span>DimensionB: </span>{filterCriteria.dimensionB}</div>
+        <div><span>DimensionC: </span>{filterCriteria.dimensionC}</div>
+      </div>
       <ProductsList products={products}></ProductsList>
     </main>
   );
