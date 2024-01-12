@@ -25,6 +25,11 @@ export async function productSearchTextToCriteria(searchText: string) {
 
   When converting numeric values and asked for an approximate amount, use a 15% threshold
   When converting product margin and percent is indicated with % or "percent" divide the value by 100
+
+  Convert any generalizations about margin using these thresholds. Pay attention to the < >= operators and use them to put the margin in the UpperBound and LowerBound properties
+  - bad, low, poor, under performing: < .33
+  - average, good, ok: > .33 and < .70
+  - best, excellent, great, ideal, leading: > .70 
   ---
   
   RESPONSE STRUCTURE
