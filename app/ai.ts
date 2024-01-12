@@ -13,7 +13,7 @@ export async function productSearchTextToCriteria(searchText: string) {
   --- 
   If an item is provided in quotes, do not change it.
   This is a list of the most popular product names: pant, short, shirt, jacket, blazer, sweater, glove
-  Translate any synonyms provided in the Query to these names when it makes sense.
+  Translate any synonyms provided in the Query to these names when it makes sense
 
   Convert any product names to singular form
   Convert any product sizes to their abbreviation: 
@@ -53,7 +53,7 @@ export async function productSearchTextToCriteria(searchText: string) {
   dimensionB is the size of the item on the purchase order: S, M, L, XL
   dimensionC is the fit of the item on the purchase order: Regular, Slim
   cost is the amount of money that was spent to acquire the product
-  msrp is the amount of money that the product should be sold for
+  msrp is the amount of money that the product should sell for
   margin is the amount of money that will be made if the product is sold for msrp: margin = msrp - cost
 
   any property ending with LowerBound is the same as the property prefix but should be used as the lower bound of a range
@@ -91,7 +91,7 @@ export async function productSearchTextToCriteria(searchText: string) {
   // console.log(chatCompletion);
   const message = chatCompletion?.choices[0].message.content || "";
   const messageAsJson = JSON.parse(message);
-  console.log(messageAsJson);
+  // console.log(messageAsJson);
   return messageAsJson;
 }
 

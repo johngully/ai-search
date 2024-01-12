@@ -49,10 +49,10 @@ function ProductsList({products}: ProductsListProps) {
   const stylesColumnNumber = "p-2 text-right";
 
   if (products?.length) {
-    results = <div className="rounded bg-white p-4">
-      <table>
+    results = <div className="rounded-xl border-gray-200 border bg-white p-4">
+      <table className="w-full">
         <thead>
-          <tr>
+          <tr className="border-b-2 border-black">
             <th className={stylesColumnText}>Product</th>
             <th className={stylesColumnText}>Dimension A</th>
             <th className={stylesColumnText}>Dimension B</th>
@@ -195,23 +195,45 @@ export default function Home() {;
 
 
   return (
-    <main className="flex min-h-screen flex-col justify-items-start space-y-4 p-24">
-      <div>
-        <div>Criteria</div>
-        <div><span>Name: </span>{filterCriteria.name}</div>
-        <div><span>DimensionA: </span>{filterCriteria.dimensionA}</div>
-        <div><span>DimensionB: </span>{filterCriteria.dimensionB}</div>
-        <div><span>DimensionC: </span>{filterCriteria.dimensionC}</div>
-        <div><span>Cost: </span>{filterCriteria.cost} {filterCriteria.costLowerBound} {filterCriteria.costLowerBound && filterCriteria.costUpperBound ? "-" : ""} {filterCriteria.costUpperBound}</div>
-        <div><span>MSRP: </span>{filterCriteria.msrp} {filterCriteria.msrpLowerBound} {filterCriteria.msrpLowerBound && filterCriteria.msrpUpperBound ? "-" : ""} {filterCriteria.msrpUpperBound}</div>
-        <div><span>Margin: </span>{filterCriteria.margin} {filterCriteria.marginLowerBound} {filterCriteria.marginLowerBound && filterCriteria.marginUpperBound ? "-" : ""} {filterCriteria.marginUpperBound}</div>
-      </div>
-      <form onSubmit={onSubmit} className="z-10 max-w-5xl w-full items-center justify-between">
-        <label className="block">Search</label>
-        <input type="text" placeholder="search for anything ..." onChange={onSearchTextChange} className="rounded p-2 w-4/5" />
-        <input type="submit" value="Search ✨" className="rounded ml-2 p-2 px-4 bg-blue-300"></input>
+    <main className="flex min-h-screen flex-col justify-items-start space-y-8">
+      <h1 className="text-2xl font-extrabold">Products</h1>
+      <form onSubmit={onSubmit} className="w-full flex items-start justify-between">
+        <input type="text" placeholder="search for anything ..." onChange={onSearchTextChange} className="flex-grow border-gray-200 border  focus:border-[#33CC99] focus:outline-none focus:shadow-lg rounded-lg p-2 px-4" />
+        <button type="submit" className="flex items-center justify-center rounded-lg p-2 px-4 font-light text-white border-gray-200 bg-[#33CC99] bg-opacity-80 hover:bg-opacity-100 shadow-md hover:shadow-lg hover:contrast-more ml-2">
+          Magic Search
+          <svg className="w-5 h-5 ml-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z" />
+          </svg>
+      </button>
+
       </form>
       <ProductsList products={products}></ProductsList>
+      <div className="bg-gray-50 border-gray-100 border-2 rounded-xl p-4 hover:bg-white [&>*]:hover:text-gray-600">
+        <div className="p-2 text-gray-300  text-2xl font-extrabold">AI Search Criteria</div>
+        <div className="p-2 text-gray-300 text-sm">Name: {filterCriteria.name}</div>
+        <div className="p-2 text-gray-300 text-sm">DimensionA: {filterCriteria.dimensionA}</div>
+        <div className="p-2 text-gray-300 text-sm">DimensionB: {filterCriteria.dimensionB}</div>
+        <div className="p-2 text-gray-300 text-sm">DimensionC: {filterCriteria.dimensionC}</div>
+
+        <div className="p-2 text-gray-300 text-sm">Cost:&nbsp;
+          {filterCriteria.cost && !filterCriteria.costLowerBound && !filterCriteria.costUpperBound ? `${filterCriteria.cost}` : null}
+          {filterCriteria.costLowerBound && !filterCriteria.costUpperBound ? `is more than ${filterCriteria.costLowerBound}` : null}
+          {!filterCriteria.costLowerBound && filterCriteria.costUpperBound ? `is less than ${filterCriteria.costUpperBound}` : null}
+          {filterCriteria.costLowerBound && filterCriteria.costUpperBound ? `${filterCriteria.costLowerBound} - ${filterCriteria.costUpperBound}` : null}
+        </div>
+        <div className="p-2 text-gray-300 text-sm">Msrp:&nbsp;
+          {filterCriteria.msrp && !filterCriteria.msrpLowerBound && !filterCriteria.msrpUpperBound ? `${filterCriteria.msrp}` : null}
+          {filterCriteria.msrpLowerBound && !filterCriteria.msrpUpperBound ? `is more than ${filterCriteria.msrpLowerBound}` : null}
+          {!filterCriteria.msrpLowerBound && filterCriteria.msrpUpperBound ? `is less than ${filterCriteria.msrpUpperBound}` : null}
+          {filterCriteria.msrpLowerBound && filterCriteria.msrpUpperBound ? `${filterCriteria.msrpLowerBound} - ${filterCriteria.msrpUpperBound}` : null}
+        </div>
+        <div className="p-2 text-gray-300 text-sm">Margin:&nbsp;
+          {filterCriteria.margin && !filterCriteria.marginLowerBound && !filterCriteria.marginUpperBound ? `${filterCriteria.margin}` : null}
+          {filterCriteria.marginLowerBound && !filterCriteria.marginUpperBound ? `is more than ${filterCriteria.marginLowerBound}` : null}
+          {!filterCriteria.marginLowerBound && filterCriteria.marginUpperBound ? `is less than ${filterCriteria.marginUpperBound}` : null}
+          {filterCriteria.marginLowerBound && filterCriteria.marginUpperBound ? `${filterCriteria.marginLowerBound} - ${filterCriteria.marginUpperBound}` : null}
+        </div>
+      </div>
     </main>
   );
 }
