@@ -71,7 +71,7 @@ function ProductsList({products}: ProductsListProps) {
             <td className={stylesColumnText}>{product.dimensionC}</td>
             <td className={stylesColumnNumber}>${product.cost}</td>
             <td className={stylesColumnNumber}>${product.msrp}</td>
-            <td className={stylesColumnNumber}>{product.margin*100}%</td>
+            <td className={stylesColumnNumber}>{Math.round(product.margin*100)}%</td>
           </tr>
         ))}
         <tr></tr>
