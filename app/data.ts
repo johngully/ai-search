@@ -6,7 +6,7 @@ export const products = [
     "dimensionC": "Regular",
     "cost": 25.99,
     "msrp": 49.99,
-    "margin": 24.00
+    "margin": 0.24
   },
   {
     "name": "Jeans",
@@ -15,7 +15,7 @@ export const products = [
     "dimensionC": "Slim",
     "cost": 34.99,
     "msrp": 69.99,
-    "margin": 35.00
+    "margin": 0.35
   },
   {
     "name": "Leather Jacket",
@@ -24,7 +24,7 @@ export const products = [
     "dimensionC": "Regular",
     "cost": 79.99,
     "msrp": 149.99,
-    "margin": 70.00
+    "margin": 0.70
   },
   {
     "name": "V-Neck T-Shirt",
@@ -33,7 +33,7 @@ export const products = [
     "dimensionC": "Slim",
     "cost": 12.99,
     "msrp": 29.99,
-    "margin": 17.00
+    "margin": 0.17
   },
   {
     "name": "Plaid Dress Shirt",
@@ -42,7 +42,7 @@ export const products = [
     "dimensionC": "Regular",
     "cost": 29.99,
     "msrp": 59.99,
-    "margin": 30.00
+    "margin": 0.30
   },
   {
     "name": "Corduroy Pants",
@@ -51,7 +51,7 @@ export const products = [
     "dimensionC": "Regular",
     "cost": 24.99,
     "msrp": 49.99,
-    "margin": 25.00
+    "margin": 0.25
   },
   {
     "name": "Wool Blazer",
@@ -60,7 +60,7 @@ export const products = [
     "dimensionC": "Regular",
     "cost": 59.99,
     "msrp": 119.99,
-    "margin": 60.00
+    "margin": 0.60
   },
   {
     "name": "Cargo Shorts",
@@ -69,7 +69,7 @@ export const products = [
     "dimensionC": "Regular",
     "cost": 19.99,
     "msrp": 39.99,
-    "margin": 20.00
+    "margin": 0.20
   },
   {
     "name": "Striped Dress Shirt",
@@ -78,7 +78,7 @@ export const products = [
     "dimensionC": "Slim",
     "cost": 27.99,
     "msrp": 54.99,
-    "margin": 27.00
+    "margin": 0.27
   },
   {
     "name": "Chino Pants",
@@ -87,7 +87,7 @@ export const products = [
     "dimensionC": "Slim",
     "cost": 22.99,
     "msrp": 44.99,
-    "margin": 22.00
+    "margin": 0.22
   },
   {
     "name": "Leather Belt",
@@ -96,7 +96,7 @@ export const products = [
     "dimensionC": "N/A",
     "cost": 14.99,
     "msrp": 29.99,
-    "margin": 15.00
+    "margin": 0.15
   },
   {
     "name": "Crew Neck Sweater",
@@ -105,7 +105,7 @@ export const products = [
     "dimensionC": "Regular",
     "cost": 28.99,
     "msrp": 54.99,
-    "margin": 26.00
+    "margin": 0.26
   },
   {
     "name": "Cargo Pants",
@@ -114,7 +114,7 @@ export const products = [
     "dimensionC": "Regular",
     "cost": 23.99,
     "msrp": 44.99,
-    "margin": 21.00
+    "margin": 0.21
   },
   {
     "name": "Leather Gloves",
@@ -123,6 +123,6 @@ export const products = [
     "dimensionC": "N/A",
     "cost": 19.99,
     "msrp": 39.99,
-    "margin": 20.00
+    "margin": 0.20
   }
 ]
