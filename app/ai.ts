@@ -99,6 +99,3 @@ export async function productSearchTextToCriteria(searchText: string) {
   // console.log(messageAsJson);
   return messageAsJson;
 }
-
-
-

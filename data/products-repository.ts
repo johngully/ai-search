@@ -25,14 +25,13 @@ async function findMany(criteria: Criteria): Promise<Products> {
   return results;
 }
 
-function addCriteriaToFilter(filters: Array<boolean>, filterResult) {
+function addCriteriaToFilter(filters: Array<boolean>, filterResult: FilterProperty) {
   if (filterResult.hasCriteria) {
     filters.push(filterResult.isMatch);
   }
 }
 
 function filterProperty(product:any, criteria:any, property:string, matchType:string="includes") {
-  
   let isMatch = false;
   const name = property.replace("LowerBound", "").replace("UpperBound", "")
   const pValue = isNaN(product[name]) ? product[name]?.trim()?.toLowerCase() : product[name];
@@ -40,7 +39,7 @@ function filterProperty(product:any, criteria:any, property:string, matchType:st
 
   let hasCriteria = cValue !== undefined && cValue !== null && cValue !== "";
   if (!hasCriteria) {
-    return { name, criteriaExists: false, isMatch: false };
+    return { name, hasCriteria: false, isMatch: false };
   }
 
   switch (matchType) {
@@ -59,5 +58,11 @@ function filterProperty(product:any, criteria:any, property:string, matchType:st
       break;
   }
 
-  return { name, hasCriteria, isMatch };
+  return { name, hasCriteria, isMatch } as FilterProperty;
 }
+
+type FilterProperty = {
+  name: string, 
+  hasCriteria: boolean, 
+  isMatch: boolean
+};
