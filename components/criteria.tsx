@@ -1,11 +1,12 @@
 type NameValuePair = { name: string, value: any };
-type CriteriaListProps = { criteria: Criteria };
-export function CriteriaList({criteria}: CriteriaListProps) {
+type CriteriaListProps = { criteria: Criteria, className?: string };
+export function CriteriaList({criteria, className }: CriteriaListProps) {
   const filterProperties = Object.keys(criteria).map(name => {
-    return { name, value: criteria[name] } as NameValuePair
+    const value = criteria[name as keyof Criteria];
+    return { name, value } as NameValuePair
   })
 
-  return <div className="min-h-12 pt-2">
+  return <div className={`min-h-12 pt-2 ${className}`}>
     {filterProperties.filter(filterProperty => !!filterProperty.value).map(filterProperty => (<Criteria key={filterProperty.name} filterProperty={filterProperty}></Criteria>))}
   </div>
 }

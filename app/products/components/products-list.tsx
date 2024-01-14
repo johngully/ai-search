@@ -1,7 +1,7 @@
 type ProductsListProps = { products: Products }
 
 export function ProductsList({products}: ProductsListProps) {
-  let results = <div className="rounded bg-white p-4">No products found</div>;
+  let results = <ProductsListEmpty></ProductsListEmpty>;
   const stylesColumnText = "p-2 text-left";
   const stylesColumnNumber = "p-2 text-right";
 
@@ -38,4 +38,15 @@ export function ProductsList({products}: ProductsListProps) {
   } 
 
   return results;
+}
+
+export function ProductsListEmpty() {
+  return (
+    <div className="min-h-full rounded-xl border-gray-200 border bg-white p-4 flex flex-col justify-center items-center">
+      <a href="/products" className="[&>p]:hover:underline text-gray-200">
+      <h2 className="text-center font-bold text-2xl text-gray-200">No Products Found</h2>
+      <p className="text-center text-gray-200 mb-8">Try searching again or clear the search</p>
+      </a>
+    </div>
+  );
 }
