@@ -1,17 +1,3 @@
-// Entities
-type Products = Array<Product>;
-
-type Product = {
-  name: string,
-  dimensionA: string,
-  dimensionB: string,
-  dimensionC: string,
-  cost: number,
-  msrp: number,
-  margin: number,
-};
-
-// Shared Types
 type Criteria = {
   name?: string,
   dimensionA?: string,
