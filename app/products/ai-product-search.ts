@@ -1,88 +1,16 @@
 import OpenAI from "openai";
+import { getPrompt } from "./ai-prompt";
+import { settingsRepository } from "@/data/settings-repository";
 
 const apiKey = process.env.OPENAI_API_KEY;
 const openai = new OpenAI({ apiKey, dangerouslyAllowBrowser: true });
 
 export async function productSearchTextToCriteria(searchText: string) {
-  const content = `
-  I want you to translate a natural language query into a structured format. 
-
-  The query will be from a merchant asking about their products. Parse the Natural Language Query and put only the relevant information into the Response Structure.  Omit any information that may be in the query, but is not found in the Response Structure.
-
-  HOW TO CONVERT
-  --- 
-  If an item is provided in quotes, do not change it.
-  This is a list of the most popular product names: pant, short, shirt, jacket, blazer, sweater, glove
-  Translate any synonyms provided in the Query to these names when it makes sense
-
-  Convert any product names to singular form
-  Convert any product sizes to their abbreviation: 
-  - Extra Small = XS
-  - Small = S
-  - Medium = M
-  - Large = L
-  - Extra Large = XL
-
-  When converting numeric values and asked for an approximate amount, use a 15% threshold
-  When converting product margin and percent is indicated with % or "percent" divide the value by 100
-
-  Convert any generalizations about margin using these thresholds. Pay attention to the < >= operators and use them to put the margin in the UpperBound and LowerBound properties
-  - bad, low, poor, under performing: < .33
-  - average, good, ok: > .33 and < .70
-  - best, excellent, great, ideal, leading: > .70 
-  ---
-  
-  RESPONSE STRUCTURE
-  ---
-  {
-    name?: string,
-    dimensionA?: string,
-    dimensionB?: string,
-    dimensionC?: string,
-    cost?: number,
-    costLowerBound?: number,
-    costUpperBound?: number,
-    msrp?: number,
-    msrpLowerBound?: number,
-    msrpUpperBound?: number,
-    margin?: number,
-    marginLowerBound?: number,
-    marginUpperBound?: number,
-  }
-  ---
-
-  RESPONSE STRUCTURE PROPERTY DESCRIPTIONS
-  ---
-  name is the name of the product
-  dimensionA is the color of the item on the purchase order: (use only color descriptions)
-  dimensionB is the size of the item on the purchase order: S, M, L, XL
-  dimensionC is the fit of the item on the purchase order: Regular, Slim
-  cost is the amount of money that was spent to acquire the product
-  msrp is the amount of money that the product should sell for
-  margin is the amount of money that will be made if the product is sold for msrp: margin = msrp - cost
-
-  any property ending with LowerBound is the same as the property prefix but should be used as the lower bound of a range
-  any property ending with UpperBound is the same as the property prefix but should be used as the upper bound of a range
-  ---
-
-  QUERY
-  ---
-  ${searchText}
-  ---
-
-  MUST DO
-  ---
-  - Respond with only the JSON structure provided below. Do not include any introduction or explanation before or after the JSON data
-  ---
-
-  MUST NOT DO
-  ---
-  - Must not respond with any text not in the Response Structure
-  - Must not use a trailing "S" from a word as a value for dimensionA, dimensionB, dimensionC
-  - Must not use values for dimensions that do not fit the property description
-  - Most not return the numeric value if both the LowerBound and UpperBound are specified (do not return cost if costUpperBound and costLowerBound have values)
-  ---
-  `;
+  const settings = await settingsRepository.get();
+  const promptProps = toPromptProps(searchText, settings);
+  const content = getPrompt(promptProps);
+  // console.log("PROMPT");
+  // console.log(content);
   const role = "user";
   const model = "gpt-3.5-turbo";
   // const model = "gpt-4";
@@ -99,3 +27,40 @@ export async function productSearchTextToCriteria(searchText: string) {
   // console.log(messageAsJson);
   return messageAsJson;
 }
+
+function toPromptProps(query: string, settings: Settings) {
+  const contextTable = entitySettingsToContextTable(settings.product);
+  const { conversion, must, mustNot } = settings.aiPrompt;
+  const promptProps = { contextTable, conversion, must, mustNot, query }
+  return promptProps;
+}
+
+function entitySettingsToContextTable(settingsObject: any) {
+  let tableString = '';
+  const settingsNames = Object.keys(settingsObject) as Array<any>;
+  const settingsArray = Object.values(settingsObject) as Array<any>;
+  
+  if (settingsArray.length === 0) {
+    return tableString;
+  }
+
+  // Reshape the settings array to contain the name of the entity as "response" property
+  for (let i=0; i<settingsArray.length; i++) {
+    settingsArray[i] = { response: settingsNames[i], ...settingsArray[i] } 
+  }
+
+  // Determine the column headers (keys from the first object)
+  // Add the header to the settings
+  const headers = Object.keys(settingsArray[0]);
+  const flat = settingsArray.map(setting => Object.values(setting));
+  flat.unshift(headers);
+
+  // Format each row into a markdown style string
+  flat.forEach((row: any) => {
+    tableString += "| " + row.join(" | ") + " |\n";
+  })
+
+  return tableString;
+}
+
+

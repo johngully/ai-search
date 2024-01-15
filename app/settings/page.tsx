@@ -6,11 +6,11 @@ export default async function SettingsPage() {
   const settings = await settingsRepository.get()
 
   return (
-    <form action={saveSettings} className="flex flex-col justify-items-start">
+    <form action={saveSettings} className="flex flex-col justify-items-start gap-y-8">
       <Card title="Product Settings">
         <EntitySettingsInputs settings={settings.product}></EntitySettingsInputs>
       </Card>
-      <Card title="AI Prompt Settings" className="mb-8">
+      <Card title="AI Prompt Settings">
         <AISettingsInputs settings={settings.aiPrompt}></AISettingsInputs>
       </Card>
       <div className="flex justify-end">
@@ -79,7 +79,7 @@ function EntitySettingInputs({ objectKey, setting }: SettingProp) {
     <div className={settingGroupStyles}>
       <div className={settingNameStyles}>{objectKey}</div>
       <div className={settingsRow}>
-      <div className={settingStyles}><span className={labelStyles}>Name: </span><input className={inputStyles} name={`${objectKey}.name`} type="text" defaultValue={setting.name}></input></div>
+      <div className={`${settingStyles} max-w-56`}><span className={labelStyles}>Name: </span><input className={inputStyles} name={`${objectKey}.name`} type="text" defaultValue={setting.name}></input></div>
       <div className={settingStyles}><span className={labelStyles}>Description: </span><textarea className={inputStyles} name={`${objectKey}.description`} defaultValue={setting.description}></textarea></div>
       <div className={settingStyles}><span className={labelStyles}>Synonyms: </span><textarea className={inputStyles} name={`${objectKey}.synonyms`} defaultValue={setting.synonyms}></textarea></div>
       </div>

@@ -1,1 +1,39 @@
-{"aiPrompt":{"conversion":"- Color: use the base color by removing additional descriptions. Here are some examples, but this is not an exhaustive list.\r\n  - Navy Blue = Blue\r\n  - Bright Yellow = Yellow\r\n- Size: use the following sizes conversions\r\n  - Extra Small = XS\r\n  - Small = S\r\n  - Medium = M\r\n  - Large = L\r\n  - Extra Large = XL\r\n- Fit: we offer the following \r\n  - Regular\r\n  - Slim","must":"- Use an entire phrase when it is specified in quotes \"navy blue\" should not be broken into two parts when specified with quotes","mustNot":""},"product":{"dimensionA":{"name":"Color","description":"The products color","synonyms":"hue, shade, colorway"},"dimensionB":{"name":"Size","description":"The size of the product","synonyms":""},"dimensionC":{"name":"Fit","description":"The fit of the product","synonyms":"silhouette"},"cost":{"name":"Cost","description":"The amount of money spent to acquire the product by the merchant so that it can be sold","synonyms":""},"msrp":{"name":"MSRP","description":"The amount of money the product should be sold for","synonyms":"sale price, price"},"margin":{"name":"Margin","description":"The percent profit that will be made from the product based upon the Cost and MSRP","synonyms":"profit"}}}
+{
+  "aiPrompt": {
+    "conversion": "Name: This is a list of the most popular product names\r\n- pant\r\n- short\r\n- shirt\r\n- jacket\r\n- blazer\r\n- sweater\r\n- glove\r\nColor: use the base color by removing additional descriptions. Here are some examples, but this is not an exhaustive list.\r\n- Navy Blue = Blue\r\n- Bright Yellow = Yellow\r\nSize: use the following sizes conversions\r\n- Extra Small = XS\r\n- Small = S\r\n- Medium = M\r\n- Large = L\r\n- Extra Large = XL\r\nFit: we offer the following \r\n- Regular\r\n- Slim\r\nWhen converting numeric values and asked for an approximate amount, use a 15% threshold\r\nConvert any generalizations about margin using these thresholds. Pay attention to the < >= operators and use them to put the margin in the UpperBound and LowerBound properties\r\n- bad, low, poor, under performing: < .33\r\n- average, good, ok: > .33 and < .70\r\n- best, excellent, great, ideal, leading: > .70 ",
+    "must": "",
+    "mustNot": ""
+  },
+  "product": {
+    "dimensionA": {
+      "name": "Color",
+      "description": "The color of the product",
+      "synonyms": "hue, shade, colorway"
+    },
+    "dimensionB": {
+      "name": "Size",
+      "description": "The size of the product",
+      "synonyms": ""
+    },
+    "dimensionC": {
+      "name": "Fit",
+      "description": "The fit of the product",
+      "synonyms": "silhouette"
+    },
+    "cost": {
+      "name": "Cost",
+      "description": "The amount of money spent to acquire the product by the merchant so that it can be sold",
+      "synonyms": ""
+    },
+    "msrp": {
+      "name": "MSRP",
+      "description": "The amount of money the product should be sold for",
+      "synonyms": "sale price, price"
+    },
+    "margin": {
+      "name": "Margin",
+      "description": "The percent profit that will be made from the product based upon the Cost and MSRP",
+      "synonyms": "profit"
+    }
+  }
+}

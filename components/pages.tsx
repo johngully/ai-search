@@ -15,5 +15,5 @@ export function Footer({children, className}: FooterProps) {
 
 type TitleProps = { children?: React.ReactNode, className?: string, text?: string };
 export function Title({children, className, text}: TitleProps) {
-  return text ? <h1 className="block text-black text-lg font-bold mb-4">{text}</h1> : <></>
+  return text ? <h1 className="block text-black text-xl font-bold mb-4">{text}</h1> : <></>
 }
