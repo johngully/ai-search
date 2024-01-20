@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import { getPrompt } from "./ai-prompt";
+import { getPrompt } from "@/ai-prompts/product-search-ai-prompt";
 import { settingsRepository } from "@/data/settings-repository";
 
 const apiKey = process.env.OPENAI_API_KEY;

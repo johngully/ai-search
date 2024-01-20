@@ -1,0 +1,91 @@
+PROMPT
+
+I want you to translate a natural language query into a structured format. The query will be from a merchant asking about their products. Parse the Natural Language Query and put only the relevant information into the Response Structure. Omit any information that may be in the query, but is not found in the Response Structure.
+
+RESPONSE STRUCTURE
+---
+{
+  name?: string,
+  dimensionA?: string,
+  dimensionB?: string,
+  dimensionC?: string,
+  cost?: number,
+  costLowerBound?: number,
+  costUpperBound?: number,
+  msrp?: number,
+  msrpLowerBound?: number,
+  msrpUpperBound?: number,
+  margin?: number,
+  marginLowerBound?: number,
+  marginUpperBound?: number,
+}
+---
+
+RESPONSE STRUCTURE ADDITIONAL CONTEXT TABLE
+---
+Use the information in this table to better understand the context of the query.
+
+| response | name | description | synonyms |
+| dimensionA | Color | The color of the product | hue, shade, colorway |
+| dimensionB | Size | The size of the product |  |
+| dimensionC | Fit | The fit of the product | silhouette |
+| cost | Cost | The amount of money spent to acquire the product by the merchant so that it can be sold |  |
+| msrp | MSRP | The amount of money the product should be sold for | sale price, price |
+| margin | Margin | The percent profit that will be made from the product based upon the Cost and MSRP | profit |
+
+---
+
+HOW TO CONVERT THE QUERY TO THE RESPONSE STRUCTURE
+--- 
+Text within qutoes should be treated as a single phrase and should not be broken apart
+Convert names to singular form
+When parsing the query keep phrases that are in quotes together. Do not break apart a phrase into separate words when it is encapsulated in single quotes or double quotes
+When converting to singular form do not use the trailing characters ("s", "es", "ies") for any other purposes
+When converting Margin and percent is indicated with % or "percent" divide the value by 100
+Any property ending with LowerBound is the same as the property prefix but should be used as the lower bound of a range
+Any property ending with UpperBound is the same as the property prefix but should be used as the upper bound of a range
+Name: This is a list of the most popular product names
+- pant
+- short
+- shirt
+- jacket
+- blazer
+- sweater
+- glove
+Color: use the base color by removing additional descriptions. Here are some examples, but this is not an exhaustive list.
+- Navy Blue = Blue
+- Bright Yellow = Yellow
+Size: use the following sizes conversions
+- Extra Small = XS
+- Small = S
+- Medium = M
+- Large = L
+- Extra Large = XL
+Fit: we offer the following 
+- Regular
+- Slim
+When converting numeric values and asked for an approximate amount, use a 15% threshold
+Convert any generalizations about margin using these thresholds. Pay attention to the < >= operators and use them to put the margin in the UpperBound and LowerBound properties
+- bad, low, poor, under performing: < .33
+- average, good, ok: > .33 and < .70
+- best, excellent, great, ideal, leading: > .70   
+---
+
+MUST DO
+---
+- Respond with only the JSON structure provided below. Do not include any introduction or explanation before or after the JSON data
+
+---
+
+MUST NOT DO
+---
+- Must not respond with any text not in the Response Structure
+- Must not use values for dimensions that do not fit the property description
+- Most not return the numeric value if both the LowerBound and UpperBound are specified (do not return cost if costUpperBound and costLowerBound have values)
+
+---
+
+QUERY
+---
+show me all "polo shirts"
+---
